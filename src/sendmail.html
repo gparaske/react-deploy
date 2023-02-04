@@ -1,0 +1,1225 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>
+    .collapsible {background-color:lightblue;color:white;cursor:pointer;padding:18px;width:100%;border:none;text-align:left;font-family: times new roman;font-size: 16px;font-weight:bold;}
+    .active, .collapsible:hover {background-color:#3E9FB0;}
+    .content {padding: 0 18px;display: none;overflow: hidden;background-color: #f1f1f1;}
+    th {background-color:lightblue;color:white;border-collapse: collapse;}
+    th, td {padding: 10px;}
+    </style></head><body>
+    <div style="background-color:lightblue;color:darkgrey;padding:1px;text-align:center;background-image: url('css/pexels-photo-355423.jpeg');background-size: cover;background-position: center;">
+    <img src='css/logo.png' alt='logo'><h4>SEND MAIL</h4></div>
+    <input id="openFileDialog" type="file" name="name" style="display: none;" />
+    
+    <button class="collapsible">JOB DETAILS</button><div class="content">
+    <p></p>
+    <table id="tbl_job" style="width: 100%;text-align:left" align="left" valign:"top">
+    <tr><td width="10%" align="left">Job Name:</td><td width="30%" align="left"><input id="textJobName" type="text" value="EDWPDF0E" style="width: 100%;text-align:left"></input></td><td width="5%" align="left"><button onclick='RunExe("SearchJobName"); return false;'>Search</button></td><td width="5%" align="left"></td><td width="5%" align="left"></td><td width="5%" align="left"></td><td width="40%" align="left" style="color:red" id="errorJobName"></td></tr>
+    <tr><td width="10%" align="left">Package:</td><td width="30%" align="left"><input id="textPackage" type="text" value="" style="width: 100%;text-align:left"></input></td><td width="5%" align="left"><button onclick='RunExe("SearchPackage"); return false;'>Search</button></td><td width="5%" align="left"><button onclick='RunExe("OpenPackage"); return false;'>Open</button></td><td width="5%" align="left"><button onclick='RunExe("OpenPackageFolder"); return false;'>Folder</button></td><td width="5%" align="left"><button onclick='RunExe("CopyPackage"); return false;'>Copy</button></td><td width="40%" align="left" style="color:red" id="errorPackage"></td></tr>
+    <tr><td width="10%" align="left">Bat File:</td><td width="30%" align="left"><input id="textBatFile" type="text" value="" style="width: 100%;text-align:left"></input></td><td width="5%" align="left"><button onclick='RunExe("SearchBatFile"); return false;'>Search</button></td><td width="5%" align="left"><button onclick='RunExe("OpenBatFile"); return false;'>Open</button></td><td width="5%" align="left"><button onclick='RunExe("OpenBatFileFolder"); return false;'>Folder</button></td><td width="5%" align="left"><button onclick='RunExe("CopyBatFile"); return false;'>Copy</button></td><td width="40%" align="left" style="color:red" id="errorBatFile"></td></tr>
+    <tr><td width="10%" align="left">Input File:</td><td width="30%" align="left"><input id="textInputFile" type="text" style="width: 100%;text-align:left"></input></td><td width="5%" align="left"><button hidden=true onclick='RunExe("CheckIncident"); return false;'>Search</button></td><td width="5%" align="left"></td><td width="5%" align="left"></td><td width="5%" align="left"></td><td width="40%" align="left" style="color:red" id="errorInputFile"></td></tr>
+    <tr><td width="10%" align="left"></td><td width="30%" align="left"></td><td width="5%" align="left"><button onclick='RunExe("FileSubmit"); return false;'>Submit</button></td><td width="5%" align="left"></td><td width="5%" align="left"></td><td width="5%" align="left"></td><td width="40%" align="left" style="color:red"></td></tr>
+    </table>
+    <p></p>
+    </div>
+    
+    <button class="collapsible">SEND MAIL</button><div class="content">
+    <p></p>
+    <table id="tbl_job" style="width: 100%;text-align:left" align="left" valign:"top">
+    <tr><td width="10%" align="left">Incident:</td><td width="30%" align="left"><input id="textIncident" type="text" style="width: 100%;text-align:left"></input></td><td width="5%" align="left"><button hidden=true onclick='RunExe("CheckIncident"); return false;'>Search</button></td><td width="55%" align="left" style="color:red" id="errorIncident"></td></tr>
+    <tr><td width="10%" align="left"></td><td width="30%" align="left"></td><td width="5%" align="left"><button onclick='RunExe("FileSubmit"); return false;'>Submit</button></td><td width="55%" align="left" style="color:red"></td></tr>
+    </table>
+    <p></p>
+    </div>
+    
+    <button class="collapsible">OUTPUT LOG</button><div class="content">
+    <p></p>
+    <textarea id="textarea" name="textarea" style="width: 100%;text-align:left" align="center" valign:"top" rows="14" cols="150"></textarea>
+    <p></p>
+    </div>
+    
+        
+    
+        <script type="text/javascript">
+    //var jobdatalist = "//w000010766/WINSCHED/paraskevopoulos/Convert Control M xml to CA7 Bat list.txt";
+    var jobdatalist = "C:/apps/schedule/Convert Control M xml to CA7 Bat list.txt";
+    var localfolder = "C:/apps/sendmail";
+    var vsApplication = "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/IDE/devenv.exe";
+    
+    
+    var sExcludeJobs = "";//"DDWPDE3A,DDWPDE3B,DDWPDE3C,DDWPDE3D,DDWPDE3E,DDWPDE3F,DDWPDE3G,DDWPDE3H,DDWPDE3I,DDWPDY07,DDWPDY08,DDWPDY09,DDWPDY10,DDWPMO12,DDWPDDR1,DDWPDDR6,DDWPDDR7,DDWPDE2A,DDWPDE2B,DDWPDE31,DDWPDE5A,DDWPDE5B,DDWPDE5C,DDWPDE5D,DDWPDE5E,DDWPDE5F,DDWPDE5G,DDWPDE5H,DDWPDE5I,DDWPDFT3,DDWPME01,DDWPMFT6,DDWPMFX2,DDWPMI09,DDWPMI10,DDWPMO04,DDWPWK01,DDWPYK01"
+    var sExcludeFolders = ".OldJobs.Packages.OLD.";
+    var sExcludeServers = "";
+    //sExcludeServers = "\\S000013845,\\W000012665" 'opoious server den brei toys vazei ws outgoing, ara bazeis ton server ston opoio anoikei h roh
+    //'sExcludeServers = "\\V000010846"
+    var bNotOnlyJobs = 1; 
+    
+    var sSET;
+    var sDTEXEC;
+    var sCopy;
+    
+    
+    var sFileNameFrom = "";
+    var sFileNameCopy = "";
+    var sPackageNameList = "";
+    var sFileOutgoingList = "";
+    
+    var sBatName = "";
+    var sJobName = "";
+    var sPackageName = "";
+    var sPackageNameList = "";
+    var sFileOutgoingList = "";
+    const aConfig = [];
+    var maxConfig = 0;
+    
+    const aNamespace = [];
+    const aVariable = [];
+    const aVariableValue = [];
+    var maxVariable = 0;
+    var maxVariableValue = 0;
+    
+    const aSetVariable = [];
+    const aSetVariableValue = [];
+    var maxSetVariable = 0;
+    
+    const Package = [];
+    var maxPackage = 0;
+    const Tables = [];
+    
+    const aFlatFile = [];
+    const aObjectName = [];
+    const aDTSID = [];
+    const aDestination = [];
+    var maxFlatFile = 0;
+    
+    var sIncomingFiles = "";
+    var sOutGoingFiles = "";
+    
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+    var shell = new ActiveXObject("WScript.Shell");
+        
+    function RunExe(index){
+      switch(index) {
+      case "SearchJobName": SearchJobName(); break;
+      case "SearchPackage": SearchPackage(); break;
+      case "SearchBatFile": SearchBatFile(); break;
+      case "OpenPackage": OpenPackage(); break;
+      case "OpenPackageFolder": OpenPackageFolder(); break;
+      case "CopyPackage": CopyPackage(); break;
+      case "OpenBatFile": OpenBatFile(); break;
+      case "OpenBatFileFolder": OpenBatFileFolder(); break;
+      case "CopyBatFile": CopyBatFile(); break;
+      }
+    }
+    
+    function OpenPackage(){
+      var textErrorPackage = document.getElementById('errorPackage');
+      textErrorPackage.innerHTML = "";
+      var textPackage = document.getElementById('textPackage');
+      if(textPackage.value!=''){
+        shell.run('"' + vsApplication + '" "' + textPackage.value + '"',1,true);
+      } else {
+        textErrorPackage.innerHTML = "Package is empty";
+      }
+    }
+    
+    function OpenPackageFolder(){
+      var textErrorPackage = document.getElementById('errorPackage');
+      textErrorPackage.innerHTML = "";
+      var textPackage = document.getElementById('textPackage');
+      if(textPackage.value!=''){
+        shell.run(GetFolderName(textPackage.value),1,true);
+      } else {
+        textErrorPackage.innerHTML = "Package is empty";
+      }
+    }
+    
+    function CopyPackage() {
+      var textPackage = document.getElementById('textPackage');
+      window.clipboardData.setData ("Text", textPackage.value);
+    }
+    
+    function OpenBatFile(){
+      var textErrorBatFile = document.getElementById('errorBatFile');
+      textErrorBatFile.innerHTML = "";
+      var textBatFile = document.getElementById('textBatFile');
+      if(textBatFile.value!=''){
+        shell.run('notepad.exe "' + textBatFile.value + '"',1,true);
+      } else {
+        textErrorBatFile.innerHTML = "BatFile is empty";
+      }
+    }
+    
+    function OpenBatFileFolder(){
+      var textErrorBatFile = document.getElementById('errorBatFile');
+      textErrorBatFile.innerHTML = "";
+      var textBatFile = document.getElementById('textBatFile');
+      if(textBatFile.value!=''){
+        shell.run(GetFolderName(textBatFile.value),1,true);
+      } else {
+        textErrorBatFile.innerHTML = "BatFile is empty";
+      }
+    }
+    
+    function GetFolderName(sFileName){
+      lastChar = strReverse(sFileName).indexOf("\\");
+      return sFileName.substr(0, sFileName.length - lastChar);
+    }
+    
+    function CopyBatFile() {
+      var textBatFile = document.getElementById('textBatFile');
+      window.clipboardData.setData ("Text", textBatFile.value);
+    }
+    
+    function SearchJobName(){
+      var textJobName = document.getElementById('textJobName');
+      var sTextJobName = textJobName.value;
+      sTextJobName = sTextJobName.toUpperCase();
+      textJobName.value = sTextJobName;
+      var textPackage = document.getElementById('textPackage');
+      textPackage.value = "";
+      var textBatFile = document.getElementById('textBatFile');
+      textBatFile.value = "";
+      document.getElementById('textarea').value = "";
+      var textInputFile = document.getElementById('textInputFile');
+      textInputFile.value = "";
+      
+      var textErrorJobName = document.getElementById('errorJobName');
+      textErrorJobName.innerHTML = "";
+      var textErrorPackage = document.getElementById('errorPackage');
+      textErrorPackage.innerHTML = "";
+      var textErrorBatFile = document.getElementById('errorBatFile');
+      textErrorBatFile.innerHTML = "";
+      var textErrorInputFile = document.getElementById('errorInputFile');
+      textErrorInputFile.innerHTML = "";
+      
+      sFileNameFrom = "";
+      sFileNameCopy = "";
+      sPackageNameList = "";
+      sFileOutgoingList = "";
+    
+      if (!fso.FileExists(jobdatalist)) {
+        textErrorJobName.innerHTML = strReplace(jobdatalist,"/","\\")+" is missing";
+        document.getElementById('textarea').value += "Can't find "+strReplace(jobdatalist,"/","\\")+".\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+      } else {
+        //var fso = new ActiveXObject("Scripting.FileSystemObject");
+        var afile;
+        afile = fso.OpenTextFile(jobdatalist, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        var sLine = ""
+        var sResult = ""
+        while(!afile.AtEndOfStream) {
+        sLine = afile.ReadLine();
+        if (sLine!="") {
+        if (sLine.substring(0, sTextJobName.length)==sTextJobName) {
+        sResult = sLine;
+        break;
+        }
+        }
+        }
+        afile.close();
+        
+        if (sResult=="") {
+        textErrorJobName.innerHTML = "Not Found";
+        } else {
+        var aResult = sResult.split(";");
+        if (aResult[0].length!=0) {
+        textJobName.value = aResult[0];
+        }
+        if (aResult[1].length!=0) {
+        textPackage.value = aResult[1];
+        }
+        if (aResult[2].length!=0) {
+        textBatFile.value = aResult[2];
+        //ForEachBat(textBatFile.value);
+        }
+        if (aResult[3].length!=0) {
+        //var sBatFilePath = aResult[2].substr(0, aResult[2].length - strReverse(aResult[2]).indexOf("\\"));
+        //afile = fso.OpenTextFile(sBatFilePath+aResult[3], 1);//ForReading=1,ForWriting=2,ForAppending=8
+        afile = fso.OpenTextFile(aResult[3], 1);//ForReading=1,ForWriting=2,ForAppending=8
+        document.getElementById('textarea').value += aResult[3] + "\n****************************************************************\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        var sLine = "";
+        const aLog = [];
+        var LogMax = 0;
+        while(!afile.AtEndOfStream && LogMax<999) {
+        sLine = afile.ReadLine();
+        if (sLine.indexOf('********************')<0) {
+        aLog[LogMax] = sLine;
+        LogMax++;
+        } else {
+        LogMax = 0;
+        }
+        }
+        afile.close();
+        for (i = 0; i < LogMax; i++) {
+        document.getElementById('textarea').value += aLog[i] + "\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+        } else {
+        document.getElementById('textarea').value += "Can't find log. Please check bat file.\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+        
+        //sFileOutgoingList
+        document.getElementById('textarea').value += sFileOutgoingList+"\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+      }
+    }
+    
+    function SearchPackage(){
+      var textJobName = document.getElementById('textJobName');
+      textJobName.value = "";
+      var textPackage = document.getElementById('textPackage');
+      var sTextPackage = textPackage.value;
+      sTextPackage = sTextPackage.toUpperCase();
+      textPackage.value = sTextPackage;
+      var textBatFile = document.getElementById('textBatFile');
+      textBatFile.value = "";
+      document.getElementById('textarea').value = "";
+      var textInputFile = document.getElementById('textInputFile');
+      textInputFile.value = "";
+      
+      var textErrorJobName = document.getElementById('errorJobName');
+      textErrorJobName.innerHTML = "";
+      var textErrorPackage = document.getElementById('errorPackage');
+      textErrorPackage.innerHTML = "";
+      var textErrorBatFile = document.getElementById('errorBatFile');
+      textErrorBatFile.innerHTML = "";
+      var textErrorInputFile = document.getElementById('errorInputFile');
+      textErrorInputFile.innerHTML = "";
+      
+      sFileNameFrom = "";
+      sFileNameCopy = "";
+      sPackageNameList = "";
+      sFileOutgoingList = "";
+    
+      if (!fso.FileExists(jobdatalist)) {
+        textErrorPackage.innerHTML = strReplace(jobdatalist,"/","\\")+" is missing";
+        document.getElementById('textarea').value += "Can't find "+strReplace(jobdatalist,"/","\\")+".\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+      } else {
+        //var fso = new ActiveXObject("Scripting.FileSystemObject");
+        var afile;
+        afile = fso.OpenTextFile(jobdatalist, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        var sLine = ""
+        var sResult = ""
+        while(!afile.AtEndOfStream) {
+        sLine = afile.ReadLine();
+        if (sLine!="") {
+        sLine = sLine.toUpperCase();
+        var aLine = sLine.split(";");
+        if (aLine[1].indexOf(sTextPackage)>=0) {
+        sResult = sLine;
+        break;
+        }
+        }
+        }
+        afile.close();
+        
+        if (sResult=="") {
+        textErrorPackage.innerHTML = "Not Found";
+        } else {
+        var aResult = sResult.split(";");
+        if (aResult[0].length!=0) {
+        textJobName.value = aResult[0];
+        }
+        if (aResult[1].length!=0) {
+        textPackage.value = aResult[1];
+        }
+        if (aResult[2].length!=0) {
+        textBatFile.value = aResult[2];
+        //ForEachBat(textBatFile.value);
+        }
+        if (aResult[3].length!=0) {
+        //var sBatFilePath = aResult[2].substr(0, aResult[2].length - strReverse(aResult[2]).indexOf("\\"));
+        //afile = fso.OpenTextFile(sBatFilePath+aResult[3], 1);//ForReading=1,ForWriting=2,ForAppending=8
+        afile = fso.OpenTextFile(aResult[3], 1);//ForReading=1,ForWriting=2,ForAppending=8
+        document.getElementById('textarea').value += aResult[3] + "\n****************************************************************\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        var sLine = "";
+        const aLog = [];
+        var LogMax = 0;
+        while(!afile.AtEndOfStream && LogMax<999) {
+        sLine = afile.ReadLine();
+        if (sLine.indexOf('********************')<0) {
+        aLog[LogMax] = sLine;
+        LogMax++;
+        } else {
+        LogMax = 0;
+        }
+        }
+        afile.close();
+        for (i = 0; i < LogMax; i++) {
+        document.getElementById('textarea').value += aLog[i] + "\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+        } else {
+        document.getElementById('textarea').value += "Can't find log. Please check bat file.\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+        
+        //sFileOutgoingList
+        document.getElementById('textarea').value += sFileOutgoingList+"\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+      }
+    }
+    
+    function SearchBatFile(){
+      var textJobName = document.getElementById('textJobName');
+      textJobName.value = "";
+      var textPackage = document.getElementById('textPackage');
+      textPackage.value = "";
+      var textBatFile = document.getElementById('textBatFile');
+      var sTextBatFile = textBatFile.value;
+      sTextBatFile = sTextBatFile.toUpperCase();
+      textBatFile.value = sTextBatFile;  
+      document.getElementById('textarea').value = "";
+      var textInputFile = document.getElementById('textInputFile');
+      textInputFile.value = "";
+    
+      var textErrorJobName = document.getElementById('errorJobName');
+      textErrorJobName.innerHTML = "";
+      var textErrorPackage = document.getElementById('errorPackage');
+      textErrorPackage.innerHTML = "";
+      var textErrorBatFile = document.getElementById('errorBatFile');
+      textErrorBatFile.innerHTML = "";
+      var textErrorInputFile = document.getElementById('errorInputFile');
+      textErrorInputFile.innerHTML = "";
+      
+      sFileNameFrom = "";
+      sFileNameCopy = "";
+      sPackageNameList = "";
+      sFileOutgoingList = "";
+    
+      if (!fso.FileExists(jobdatalist)) {
+        textErrorBatFile.innerHTML = strReplace(jobdatalist,"/","\\")+" is missing";
+        document.getElementById('textarea').value += "Can't find "+strReplace(jobdatalist,"/","\\")+".\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+      } else {
+        //var fso = new ActiveXObject("Scripting.FileSystemObject");
+        var afile;
+        afile = fso.OpenTextFile(jobdatalist, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        var sLine = ""
+        var sResult = ""
+        while(!afile.AtEndOfStream) {
+        sLine = afile.ReadLine();
+        if (sLine!="") {
+        sLine = sLine.toUpperCase();
+        var aLine = sLine.split(";");
+        if (aLine[2].indexOf(sTextBatFile)>=0) {
+        sResult = sLine;
+        break;
+        }
+        }
+        }
+        afile.close();
+        
+        if (sResult=="") {
+        textErrorBatFile.innerHTML = "Not Found";
+        } else {
+        var aResult = sResult.split(";");
+        if (aResult[0].length!=0) {
+        textJobName.value = aResult[0];
+        }
+        if (aResult[1].length!=0) {
+        textPackage.value = aResult[1];
+        }
+        if (aResult[2].length!=0) {
+        textBatFile.value = aResult[2];
+        //ForEachBat(textBatFile.value);
+        }
+        if (aResult[3].length!=0) {
+        //var sBatFilePath = aResult[2].substr(0, aResult[2].length - strReverse(aResult[2]).indexOf("\\"));
+        //afile = fso.OpenTextFile(sBatFilePath+aResult[3], 1);//ForReading=1,ForWriting=2,ForAppending=8
+        afile = fso.OpenTextFile(aResult[3], 1);//ForReading=1,ForWriting=2,ForAppending=8
+        document.getElementById('textarea').value += aResult[3] + "\n****************************************************************\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        var sLine = "";
+        const aLog = [];
+        var LogMax = 0;
+        while(!afile.AtEndOfStream && LogMax<999) {
+        sLine = afile.ReadLine();
+        if (sLine.indexOf('********************')<0) {
+        aLog[LogMax] = sLine;
+        LogMax++;
+        } else {
+        LogMax = 0;
+        }
+        }
+        afile.close();
+        for (i = 0; i < LogMax; i++) {
+        document.getElementById('textarea').value += aLog[i] + "\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+        } else {
+        document.getElementById('textarea').value += "Can't find log. Please check bat file.\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+        
+        //sFileOutgoingList
+        document.getElementById('textarea').value += sFileOutgoingList+"\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        }
+      }
+    }
+    
+    function ForEachSET(sSET){
+        sSET = sSET.toUpperCase();
+        sSET = strReplace(sSET,'=',' ');
+        var aSET = sSET.split(" ");
+        var argNum = 0;
+        var sSetVariable = "";
+        var sSetVariableValue = "";
+        for (var i = 0; i < aSET.length; i++) {
+        if (aSET[i]!='') {
+        argNum++;
+        if (argNum==2) {
+        sSetVariable = aSET[i];
+        }
+        if (argNum==3) {
+        sSetVariableValue = aSET[i];
+        }
+        }
+        }
+        aSetVariable[maxSetVariable] = sSetVariable;
+        aSetVariableValue[maxSetVariable] = sSetVariableValue;
+        maxSetVariable++;
+    }
+    function ForEachDTEXEC(sDTEXEC){
+        sPackageName = ""; 
+        maxConfig = 0;
+        maxVariable = 0;
+        maxVariableValue = 0;
+        sLine = sDTEXEC;
+        sLine = strReplace(sLine,String.fromCharCode(9)," ");
+        sLine = sLine.toUpperCase();
+    
+        //den kserw giati eixa balei ayta ta dyo
+        //aSetVariable[maxSetVariable] = sSetVariable;
+        //aSetVariableValue[maxSetVariable] = sSetVariableValue;
+        for (var i = 0; i < maxSetVariable; i++) {
+        sLine = strReplace(sLine,"%"+aSetVariable[i]+"%",aSetVariableValue[i]);
+        }
+        aLine = sLine.split(" ");
+        var GetNextValue = 0;
+        for (var i = 0; i < aLine.length; i++) {
+        var aLineUC = aLine[i].toUpperCase();
+        if (aLineUC.indexOf(".DTSX")>=0) {
+        sPackageName = aLine[i].trim();
+        }
+        if (aLineUC.indexOf(".DTSCONFIG")>=0 && aLineUC.indexOf("/PACKAGES/")>=0) { //InStr(1,UCase(aLine(i)),".DTSCONFIG",1)>0 And InStr(1,UCase(aLine(i)),"\PACKAGES\",1)>0 Then
+        //Mono gia config timwn ki oxi Connection
+        aConfig[maxConfig] = aLine[i].trim();
+        maxConfig++;
+        }
+        }
+        
+        if (maxConfig > 0) {
+        for (var i = 0; i < maxConfig; i++) {
+        sConfigName = aConfig[i];
+        ForEachConfig(sConfigName);
+        }
+        }
+        
+        if (sPackageName!="") {
+        ForEachPackage(sPackageName);
+        } else {
+    //	'objFileToWrite.WriteLine sBatName+";NO PACKAGE"
+    //'DDWPDE29	NO FLATFILE                                                                                                                                                             
+    //'DDWPDNFT	\\V000010846\WINSCHED\DDW\DDWPDNFT\commit.org, \\V000010846\WINSCHED\DDW\DDWPDNFT\commit.txt, \v000010846\WINSCHED\DDW\DDWPDNFT\Files\*.csv                             
+    //'DDWPDY06	NO FLATFILE                                                                                                                                                             
+    //'DDWPMO11	\\S000013845\winsched\DDW\DDWPMO10\Files\DW021_EP1_*.txt, \\S000013845\winsched\DDW\DDWPMO10\Files\DW021_EP2_*.txt, \\S000013845\winsched\DDW\DDWPMO10\Files\DW021_*.txt
+    //'DDWPDA01	\\A99001007\iris\MIS_ETE\*, \\w000010002\FtpRoot\HLY\FTOVEDEP\Files\SAP_BA*                                                                                             
+    //'DDWPDDR6	NO FLATFILE                                                                                                                                                             
+    //'DDWPDDR7	NO FLATFILE                                                                                                                                                             
+    //'DDWPME71	\\W000012665\winsched\DDW\DDWPME70\FILES\IB_Transactions.zip                                                                                                            
+    //'DDWPYK01	\\W900450001\Files\Public\P00350\"!942-52-Γ"\"JOBS_ΚΑΡΤΩΝ"\PLATINUM\Platinum.txt                                                                                        
+        sPackageNameList = sPackageNameList + "NO PACKAGE, ";
+        sFileOutgoingList = sFileOutgoingList + "NO PACKAGE, ";
+        }
+    }
+    
+    function ScanPackageVars(sPackageName){
+    //'  <DTS:Variables>
+    //'    ...
+    //'    <DTS:Variable
+    //'      DTS:CreationName=""
+    //'      DTS:DTSID="{01E46352-8A00-41E7-B8FC-833D6AF8C50A}"
+    //'      DTS:IncludeInDebugDump="2345"
+    //'      DTS:Namespace="User"
+    //'      DTS:ObjectName="FilePath">
+    //'      <DTS:VariableValue
+    //'        DTS:DataType="8">D:\WINSCHED\DDW\FILES\APPR_IRL\</DTS:VariableValue>
+    //'    </DTS:Variable>
+    //'    ...
+    //'  </DTS:Variables>
+        var sNamespace = "";
+        bVariables = 0; bObjectName = 0;
+        var objFile = fso.OpenTextFile(sPackageName, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        while(!objFile.AtEndOfStream) {
+        linein = objFile.ReadLine();
+        if ((linein.indexOf("<DTS:Variables>")>=0) || (linein.indexOf("<DTS:Variable>")>=0)){
+        bVariables = 1; sExpression = "";
+        }
+        if (bVariables == 1){
+    //'DTS:Expression="@[User::rvarFilePath] + &quot;Digital_Business_Daily_Dashboard_&quot;+ ( REPLACE(  @[User::rvarBatchDate] , &quot;-&quot;, &quot;&quot;) ) + &quot;.txt&quot;"
+        if (linein.indexOf("DTS:Expression=")>=0){
+        sHeader = "DTS:Expression=";
+        iStart = linein.indexOf(sHeader);
+        iStart = iStart + sHeader.length+1;
+        sExpression = linein.substring(iStart, linein.length-iStart);// '"User"
+        }
+    //'<DTS:Property DTS:Name="Namespace">User</DTS:Property> OLD
+        if ((linein.indexOf("DTS:Namespace=")>=0) || (linein.indexOf('Namespace">')>=0)){
+        sHeader = "DTS:Namespace=";
+        if (linein.indexOf('Namespace">')>=0){ 
+        sHeader = 'Namespace">';
+        iStart = linein.indexOf(sHeader);
+        iStart = iStart + sHeader.length;
+        iEnd = linein.indexOf("<",iStart);
+        sNamespace = linein.substring(iStart, iEnd-iStart);// '"User"
+        } else {
+        iStart = linein.substring(sHeader,1);
+        iStart = iStart + sHeader.length+1;
+        sNamespace = linein.substring(iStart, linein.length-iStart);// '"User"
+        }
+        sVariable = ""; sVariableValue = "";
+        bObjectName = 0; bVariableValue = 0;
+    //'sNamespace = InputBox("sNamespace", "Value", sNamespace)
+        }
+    //'<DTS:Property DTS:Name="ObjectName">FilePath</DTS:Property> OLD
+        if ((linein.indexOf("DTS:ObjectName=")>=0) || (linein.indexOf('ObjectName">')>=0)){
+        bObjectName = 1;
+        sHeader = "DTS:ObjectName=";
+        if ((linein.indexOf('ObjectName">')>=0) && (linein.indexOf("DTS:ObjectName=")<0)){ 
+        sHeader = 'ObjectName">';
+        iStart = linein.indexOf(sHeader);
+        iStart = iStart + sHeader.length;
+        iEnd = linein.indexOf("<",iStart);
+        sVariable = linein.substring(iStart, iEnd-iStart);// '"FilePath"
+        } else {
+        iStart = linein.indexOf(sHeader);
+        iStart = iStart + sHeader.length + 1;
+        iEnd = linein.indexOf('"',iStart);
+    //'MsgBox linein+"_"+cStr(iStart)+"_"+cStr(iEnd)+"_"+sPackageName
+        sVariable = linein.substring(iStart, iEnd-iStart);// '"FilePath"
+    //'MsgBox sVariable
+        }
+    //'sVariable = InputBox("ObjectName:", "Value", sVariable)
+        }
+    //'<DTS:Property DTS:Name="IncludeInDebugDump">2345</DTS:Property><DTS:VariableValue DTS:DataType="8">\\W094200069\e$\FILES\OUTPUT\ExtractionFiles\NEW\</DTS:VariableValue> OLD
+        if ((linein.indexOf("DTS:DataType=")>=0) && (linein.indexOf("</DTS:VariableValue>")>=0)){
+        bVariableValue = 1;
+        iStart = linein.indexOf("DTS:DataType=");
+        iStart = linein.indexOf(">",iStart);
+        iStart = iStart + String(">").length;
+        iEnd = linein.indexOf("</DTS:VariableValue>",iStart);
+        if (iEnd>0){
+        sVariableValue = linein.substring(iStart, iEnd-iStart);// 'D:\WINSCHED\DDW\FILES\APPR_IRL\
+        }
+    //'sVariableValue = InputBox("sVariableValue", "Value", sVariableValue)
+        }
+        if ((bObjectName == 1) && (bVariableValue == 1)){
+        Found = 0;
+        for (var j = 0; j < maxVariable; j++) {
+        if (aVariable[j] == sVariable){
+        Found = 1;
+        break;
+        }
+        }
+        if (Found == 0){
+        //' an den uparxei stis config metablites prepei na broume tin timi ap to paketo
+        //'bObjectName = 1
+        aNamespace[maxVariable] = sNamespace;
+        aVariable[maxVariable] = sVariable;
+        if (sExpression!=""){ 
+        sVariableValue = sExpression;
+        }
+        //sVariableValue = strReplace(sVariableValue.toUpperCase(),"D:/","//S000013845/");
+        sVariableValue = strReplace(sVariableValue.toUpperCase(),"D:\\","\\\\S000013845\\");
+    //'MsgBox "From Package: "+sNamespace+"::"+sVariable+"="+sVariableValue
+        document.getElementById('textarea').value += "From Package: "+sNamespace+"::"+sVariable+"="+sVariableValue+"\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+        aVariableValue[maxVariable] = sVariableValue;
+        maxVariable = maxVariable + 1;// '\\S000013845\WINSCHED\DDW\FILES\APPR_IRL\
+        } else {
+        //
+        }
+        sNamespace = ""; sVariable = ""; sVariableValue = ""; sExpression = "";
+        bObjectName = 0; bVariableValue = 0;
+        }
+        }
+        if ((linein.indexOf("</DTS:Variables>",1)>=0) && (bVariables == 1)){
+        break;
+        }
+        }
+        objFile.close();
+    
+    //	'For i = 0 To maxVariable - 1
+    //	'	msgbox cStr(i)+". %"+aVariable(i)+"%="+aVariableValue(i)
+    //	'Next
+        ApplySetVariables();// 'Scan variables for references to other variables
+    //	'For i = 0 To maxVariable - 1
+    //	'	msgbox "%"+aVariable(i)+"%="+aVariableValue(i)
+    //	'Next
+    }
+    
+    function ApplySetVariables(){
+        for (var j = 0; j < maxVariable; j++) {
+        sCopy = aVariableValue[j];
+        for (var k = 0; k < maxVariable; k++) {
+        tmpVariableValue = strReplace(aVariableValue[k],'"',"");
+        sCopy = strReplace(sCopy,"@[USER::"+aVariable[k].toUpperCase()+"]",tmpVariableValue);
+        sCopy = strReplace(sCopy,"&QUOT;","");
+        sCopy = strReplace(sCopy," + ","");
+        sCopy = strReplace(sCopy," +","");
+        sCopy = strReplace(sCopy,"+ ","");
+        sCopy = strReplace(sCopy," , ","");
+        sCopy = strReplace(sCopy," ,","");
+        sCopy = strReplace(sCopy,", ","");
+        sCopy = strReplace(sCopy,"REPLACE(","");
+        }
+        aVariableValue[j] = sCopy;
+        }
+        //'problepetai mono h periptwsh na exei mia metabliti mesa se mia metabliti
+        for (var j = 0; j < maxVariable; j++) {
+        sCopy = aVariableValue[j];
+        for (var k = 0; k < maxVariable; k++) {
+        tmpVariableValue = strReplace(aVariableValue[k],'"',"");
+        sCopy = strReplace(sCopy,"@[USER::"+aVariable[k].toUpperCase()+"]",tmpVariableValue);
+        sCopy = strReplace(sCopy,"&QUOT;","");
+        sCopy = strReplace(sCopy," + ","");
+        sCopy = strReplace(sCopy," +","");
+        sCopy = strReplace(sCopy,"+ ","");
+        sCopy = strReplace(sCopy," , ","");
+        sCopy = strReplace(sCopy," ,","");
+        sCopy = strReplace(sCopy,", ","");
+        sCopy = strReplace(sCopy,"REPLACE(","");
+        }
+        aVariableValue[j] = sCopy;
+        }
+    }
+    function ReplaceDateFormat(sConString){
+    //'msgbox "IN>>"+sConString
+    //'        DTS:Name="ConnectionString">@[User::varFilePathName] + SUBSTRING( @[User::nCurrDt],1,4)+ "_" +SUBSTRING( @[User::nCurrDt],6,2) +  "_" +SUBSTRING( @[User::nCurrDt],9,2)+".TXT"</DTS:PropertyExpression>
+        sConString = strReplace(sConString,"replace","REPLACE");
+        sConString = strReplace(sConString,"LTRIM","REPLACE");
+        sConString = strReplace(sConString,"RTRIM","REPLACE");
+        sConString = strReplace(sConString,"SUBSTRING","REPLACE");
+        iStart = sConString.indexOf("REPLACE");
+        if (iStart>0){
+        sFrstPart = "";
+        if (iStart>1){ sFrstPart = sConString.substring(1, iStart-1); }
+        iEnd = sConString.indexOf(".",iStart);
+        sLastPart = "";
+        if (iEnd>0){
+        sLastPart = sConString.substring(iEnd, sConString.length);
+        sMainPart = sConString.substring(iStart, iEnd-iStart);
+        } else {
+        sMainPart = sConString.substring(iStart, sConString.length);
+        }
+        
+        //'msgbox sFrstPart
+        //'msgbox sLastPart
+        //'msgbox sMainPart
+        
+        sMainPart = strReplace(sMainPart,")","(");
+        sMainPart = strReplace(sMainPart,",","(");
+        aMainPart = sMainPart.split("(");
+        sMainNew = "";
+        for (var j = 0; j < aMainPart.length; j++) {
+        if (aMainPart[j].indexOf("@")>=0) {
+        sMainNew = sMainNew + aMainPart[j];
+        }
+        }
+        //'msgbox sMainNew
+        sConString = sFrstPart + sMainNew + sLastPart;
+    //'msgbox "OUT>>"+sConString
+        }
+    }
+    function ForEachPackage(sPackageName){
+        maxFlatFile = 0;
+    //'  <DTS:ConnectionManagers>
+    //'    <DTS:ConnectionManager
+    //'      DTS:refId="Package.ConnectionManagers[AP_APROVALS]"
+    //'      DTS:CreationName="FLATFILE"
+    //'      DTS:DTSID="{225230D9-1CAB-4BD2-8AB0-5D8B476ABF97}"
+    //'      DTS:ObjectName="AP_APROVALS">
+    //'      <DTS:PropertyExpression
+    //'        DTS:Name="ConnectionString">@[User::FilePath]+ replace(@[User::Filename1],"YYYYMMDD", replace(@[User::DataDate],"-","") ) +"."+ @[User::FileExtension]</DTS:PropertyExpression>
+    //'      <DTS:ObjectData>
+    //'      ...
+    //'  </DTS:ConnectionManagers>
+    //'OR
+    //'          DTS:ConnectionString="C:\Temp\Success.txt">
+        sPackageName = strReplace(sPackageName.toUpperCase(),"D:\\","\\\\S000013845\\");
+        if (!fso.FileExists(sPackageName)) {
+        sPackageNameList = sPackageNameList + "PACKAGE DOES NOT EXIST, ";
+        sFileOutgoingList = sFileOutgoingList + "PACKAGE DOES NOT EXIST, ";
+        } else {
+        ScanPackageVars(sPackageName);
+        for (var i = 0; i < maxVariable; i++) {
+        if (aVariable[i].indexOf("Date")>=0){
+        aVariableValue[i] = "";
+        }
+        }
+        sFlatFileList = ""; sConString = ""; sObjectNameList = ""; sObjectName = ""; sDTSID = "";
+        bConManagers = 0; bFlatFile = 0; bFlatFileObject = 0; bFileSystemTask = 0; FlatFileColumn = 0;
+        var objFile = fso.OpenTextFile(sPackageName, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        while(!objFile.AtEndOfStream) {
+        linein = objFile.ReadLine();
+        if (linein.indexOf("<DTS:ConnectionManager")>=0) {
+        bConManagers = 1;
+        }
+        if (bConManagers==1){
+    //'<DTS:Property DTS:Name="CreationName">FLATFILE</DTS:Property><DTS:PropertyExpression DTS:Name="ConnectionString">@[User::vstrFilePath]+ @[User::vstrFileName]+"_"+ @[User::vstrDataDate]+"."+ @[User::vstrFileType]</DTS:PropertyExpression><DTS:ObjectData><DTS:ConnectionManager>
+    //'<DTS:Property DTS:Name="CreationName">FLATFILE</DTS:Property><DTS:PropertyExpression DTS:Name="ConnectionString">
+    //'@[User::vstrFilePath]+ @[User::vstrFileName]+"_CHK_"+ @[User::vstrDataDate]+"."+ @[User::vstrFileType]</DTS:PropertyExpression><DTS:ObjectData><DTS:ConnectionManager>
+    //'DTS:ConnectionString="C:\Temp\Success.txt">
+        if ((linein.indexOf('DTS:CreationName="FLATFILE"')>=0) || (linein.indexOf('<DTS:Property DTS:Name="CreationName">FLATFILE')>=0) || (linein.indexOf('DTS:CreationName="FILE"')>=0) || (linein.indexOf('<DTS:Property DTS:Name="CreationName">FILE')>=0) || (linein.indexOf('<DTS:Property DTS:Name="CreationName">EXCEL')>=0)){
+        bFlatFile = 1;
+        }
+    //'<DTS:FlatFileColumn> agnohse ola ta ObjectName/DTSID pou aforoun kolones
+        if (linein.indexOf("<DTS:FlatFileColumn>")>=0) {FlatFileColumn = 1;}
+        if (linein.indexOf("</DTS:FlatFileColumn>")>=0) {FlatFileColumn = 0;}
+        if (FlatFileColumn==0) {
+    //'      DTS:ObjectName="INSEA_CLAIM_PERS_M_YYYYMM_FEED">
+    //'<DTS:Property DTS:Name="ObjectName">ContractID</DTS:Property>
+        if ((linein.indexOf('DTS:ObjectName="')>=0) || (linein.indexOf('DTS:Name="ObjectName">')>=0)) {
+        if (linein.indexOf('DTS:ObjectName="')>=0) {
+        iStart = linein.indexOf('DTS:ObjectName="')+String('DTS:ObjectName="').length;
+        iEnd = linein.indexOf('"',iStart);
+        } else {
+        iStart = linein.indexOf('DTS:Name="ObjectName">')+String('DTS:Name="ObjectName">').length;
+        iEnd = linein.indexOf("<");
+        }
+        if (iEnd>0) { sObjectName = linein.substring(iStart, iEnd-iStart); }
+        }
+    //'      DTS:DTSID="{B50834BE-5245-446C-B466-DB456C3978C3}"
+    //'<DTS:Property DTS:Name="DTSID">{6DDBAD9D-F647-49C7-A9A3-6DD787541317}</DTS:Property>
+        if (linein.indexOf('DTS:DTSID="')>=0 || linein.indexOf('DTS:Name="DTSID">')>=0){
+        if (linein.indexOf('DTS:DTSID="')>=0){
+        iStart = linein.indexOf('DTS:DTSID="')+String('DTS:DTSID="').length;
+        iEnd = linein.indexOf('"',iStart);
+        } else {
+        iStart = linein.indexOf('DTS:Name="DTSID">')+String('DTS:Name="DTSID">').length;
+        iEnd = linein.indexOf("<",iStart);
+        }
+        if (iEnd>0) { sDTSID = linein.substring(iStart, iEnd-iStart); } 
+        }
+        }
+        }
+        if (bFlatFile==1){
+        if (linein.indexOf("ConnectionString")>=0){
+        iStart = linein.indexOf("ConnectionString");
+        iStart = linein.indexOf(">",iStart)+1;
+        if ((iStart>linein.length) && (linein.indexOf("ConnectionString")>=0)) {
+        linein = objFile.ReadLine();
+        iStart = 1;
+        }
+        iEnd = linein.indexOf("</",iStart);
+        if (iEnd>0){
+        sConString = linein.substring(iStart, iEnd-iStart);// '@[User::FilePath]+ replace(@[User::Filename1],"YYYYMMDD", replace(@[User::DataDate],"-","") ) +"."+ @[User::FileExtension]
+        } else { 
+        if (linein.indexOf('DTS:ConnectionString="')>=0) {//'          DTS:ConnectionString="C:\Temp\Success.txt">
+        iStart = linein.indexOf('DTS:ConnectionString="')+String('DTS:ConnectionString="').length;
+        iEnd = linein.indexOf('"',iStart);//'2021-07-27 iEnd = InStr(iStart,linein,""">",1)
+        sConString = linein.substring(iStart, iEnd-iStart);
+        } else { //'to DDWPMFT9 exei polles grammes
+    //'<DTS:Property DTS:Name="CreationName">FILE</DTS:Property><DTS:PropertyExpression DTS:Name="ConnectionString">@[User::OEKSourcePath]+"IRKT-OEK-013-M-PL"  
+    //'+"_"+SUBSTRING( @[User::DataDate] , 7, 4)  
+    //'+"_"+SUBSTRING( @[User::DataDate] , 4, 2)  
+    //'+"_"+SUBSTRING( @[User::DataDate] , 1, 2)  
+    //'+".xls"</DTS:PropertyExpression><DTS:ObjectData><DTS:ConnectionManager>
+        sConString = linein.substring(iStart, linein.length);
+        iEnd = 0;
+        while(iEnd==0) {
+        linein = objFile.ReadLine();
+        iEnd = linein.indexOf("</");
+        if (iEnd==0) {
+        sConString = sConString + linein;
+        } else {
+        sConString = sConString + linein.substring(1, iEnd-1);// '@[User::FilePath]+ replace(@[User::Filename1],"YYYYMMDD", replace(@[User::DataDate],"-","") ) +"."+ @[User::FileExtension]
+        }
+        }
+        }
+    //'sConString = InputBox("NO </", "Value", sConString)
+    //'sConString = InputBox("NO </", "Value", sConString)
+        }
+        if (sConString.indexOf(";")>=0) {
+        aConString = sConString.split(";");
+        for (var i = 0; i < aConString.length; i++) {
+        if (aConString[i].indexOf("Data Source=")>=0) {
+        iStart = aConString[i].indexOf("Data Source=")+String("Data Source=").length;
+        sConString = aConString[i].substring(iStart, aConString[i].length);
+        break;
+        }
+        }
+        }
+        ReplaceDateFormat(sConString);
+        for (var i = 0; i < maxVariable; i++) {
+        sTemp = strReplace(sConString,"@["+aNamespace[i]+"::"+aVariable[i]+"]",aVariableValue[i]);
+        sConString = sTemp;
+        }
+        iStart = sConString.indexOf("@[User::");
+        while(iStart > 0) {
+        iEnd = sConString.indexOf("]",iStart);
+        sConString = sConString.substring(1,iStart-1)+sConString.substring(iEnd+1,sConString.length);
+        iStart = sConString.indexOf("@[User::",iStart);
+        }
+    //'@[User::FilePath]+ "ConsumerLoans_Accounts_Rythmiseis_"+REPLACE( (DT_WSTR, 20) (DT_DBDATE) DATEADD( "dd", -1, @[System::StartTime] ) , "-", "" ) +"."+@[User::FileExtension]
+    //'@[User::cvarFilePath]+ REPLACE(@[User::varFileName],"YYYYMMDD", @[User::ivarDataDate])
+        sConString = strReplace(sConString," ","");
+        sConString = strReplace(sConString,",","");
+        sConString = strReplace(sConString,"+","");
+        sConString = strReplace(sConString,"-","");
+        sConString = strReplace(sConString,"replace","");
+        sConString = strReplace(sConString,"REPLACE","");
+        sConString = strReplace(sConString,"(","");
+        sConString = strReplace(sConString,")","");
+        sConString = strReplace(sConString,'"YYYYMMDD"',"");
+        sConString = strReplace(sConString,'"',"");
+        
+        sConString = strReplace(sConString,"DT_WSTR","");
+        sConString = strReplace(sConString,"DT_DBDATE","");
+        sConString = strReplace(sConString,"DATEADD","");
+        sConString = strReplace(sConString,"@[System::StartTime]","");
+        //alert(sConString);
+        sConString = strReplace(sConString.toUpperCase(),"D:/","//S000013845/");
+        //sPackageName = strReplace(sPackageName.toUpperCase(),"D:\\","\\\\S000013845\\");
+    //'Msgbox "C sConString="+sConString
+        sFlatFileList = sFlatFileList + sConString + ", ";
+        sObjectNameList = sObjectNameList + sObjectName + ", ";
+        aObjectName[maxFlatFile] = sObjectName;
+        aDTSID[maxFlatFile] = sDTSID;
+        if (sObjectName == "") { alert(sPackageName+": sObjectName is Null"); }
+        if (sDTSID == "") { alert(sPackageName+": sDTSID is Null"); }
+        aDestination[maxFlatFile] = "U";
+    //'sConString=inputbox("sConString","value",sConString)
+        aFlatFile[maxFlatFile] = sConString;
+        maxFlatFile = maxFlatFile + 1;
+        document.getElementById('textarea').value += "sFlatFileList="+sFlatFileList+"\n"; document.getElementById('textarea').scrollTop = document.getElementById('textarea').scrollHeight;
+    //'MsgBox sFlatFileList
+        sConString = "";
+        bFlatFile = 0;
+        }
+        }
+        if ((linein.indexOf("</DTS:ConnectionManagers>")>=0) && (bConManagers==1)){
+        //'Exit Do
+        }
+    //' --------------- Check for Flat File Source/Destination objects ------------
+    //'                    <connection
+    //'                      refId="Package\SC Load File To Table &amp; Checks\DFT Load File to Dest Table\Flat File Source.Connections[FlatFileConnection]"
+    //'                      connectionManagerID="Package.ConnectionManagers[INSEA_CLAIM_PERS_M_YYYYMM_FEED]"
+    //'                      connectionManagerRefId="Package.ConnectionManagers[INSEA_CLAIM_PERS_M_YYYYMM_FEED]"
+    //'                      name="FlatFileConnection" />
+        if ((linein.indexOf('Flat File Source"')>=0) || (linein.indexOf('Excel Source"')>=0)){
+        bFlatFileObject = 1;
+        }
+        if ((linein.indexOf('Flat File Destination"')>=0) || (linein.indexOf('Excel Destination"')>=0)){
+        bFlatFileObject = 2;
+        }
+        if ((linein.indexOf("connectionManagerID=")>=0) && (bFlatFileObject>0)){
+        for (var i = 1; i <= maxFlatFile; i++) {
+        if ((linein.indexOf("["+aObjectName(i-1)+"]")>=0) || (linein.indexOf(aDTSID[i-1])>=0)){
+        if (bFlatFileObject==1) {
+        aDestination[i-1] = "I";// 'Incoming
+        } else { //'2
+        aDestination[i-1] = "O";// 'Outgoing
+        }
+        bFlatFileObject = 0;
+        break;
+        }
+        }
+        }
+    //' ------------------- File System Task --------------------------
+    //'          TaskSourcePath="{34D6C64E-4719-4BE1-8CCF-E15EFA16B900}"
+    //'          TaskDestinationPath="{B50834BE-5245-446C-B466-DB456C3978C3}" />
+        if (linein.indexOf("File System Task")>=0) {
+        bFileSystemTask = 1;
+        }
+        if ((linein.indexOf("TaskSourcePath=")>=0) && (bFileSystemTask==1)){
+        for (var i = 1; i <= maxFlatFile; i++) {
+        if (linein.indexOf(aDTSID[i-1])>=0) {
+        if (aDestination[i-1] == "U") {
+        aDestination[i-1] = "I";// 'Incoming
+        }
+        break;
+        }
+        }
+        }
+        if ((linein.indexOf("TaskDestinationPath=")>=0) && (bFileSystemTask==1)){
+        for (var i = 1; i <= maxFlatFile; i++) {
+        if (linein.indexOf(aDTSID[i-1])>=0) {
+        if (aDestination[i-1] == "U") {
+        aDestination[i-1] = "O";// 'Outgoing
+        }
+        bFileSystemTask = 0;
+        //'break; 'mporei na einai sthn idia grammi
+        }
+        }
+        }
+    //'SQLTask:Connection="{3F0830F2-C541-4132-8F47-C3700C2F6089}"
+        if (linein.indexOf('SQLTask:Connection="')>=0) {
+        iStart = linein.indexOf('SQLTask:Connection="')+String('SQLTask:Connection="').length;
+        iEnd = linein.indexOf('"',iStart);
+        if (iEnd>0) { sConDTSID = linein.substring(iStart, iEnd-iStart); }
+        for (var i = 1; i <= maxFlatFile; i++) {
+        if (linein.indexOf(aDTSID[i-1])>=0) {
+        if (aDestination[i-1] == "U") {
+        aDestination[i-1] = "O";// 'Outgoing (den exw brei input, para mono update/create)
+        }
+        }
+        }
+        }
+        }
+        objFile.close();
+        if (sFlatFileList!=""){
+        sPackageNameList = sPackageNameList + sFlatFileList.substring(1,sFlatFileList.length-2) + ", ";
+        //'sFileOutgoingList = sFileOutgoingList + Mid(sObjectNameList,1,Len(sObjectNameList)-2) + ", " 
+        for (var i = 1; i <= maxFlatFile; i++) {
+        sFileOutgoingList = sFileOutgoingList + aObjectName[i-1] + "(" + aDestination[i-1] + "), ";
+        }
+        } else {
+        sPackageNameList = sPackageNameList + "NO FLATFILE, ";
+        sFileOutgoingList = sFileOutgoingList + ", ";
+        //'objFileToWrite.WriteLine sBatName+";NO FLATFILE"
+        }
+        }
+    }
+    function ForEachConfig(sConfigName){
+    //'<?xml version="1.0"?>
+    //'<DTSConfiguration>
+    //'<DTSConfigurationHeading>
+    //'<DTSConfigurationFileInfo GeneratedBy="NBGIT\e36138" GeneratedFromPackageName="IRDO_535_W-PL-N" GeneratedFromPackageID="{6A744E64-CF5D-428C-887E-E3201C1F3ADE}" GeneratedDate="8/5/2013 2:10:06 μμ"/>
+    //'</DTSConfigurationHeading>
+    //'<Configuration ConfiguredType="Property" Path="\Package.Variables[User::FilePath].Properties[Value]" ValueType="String">
+    //'<ConfiguredValue>\\S000013845\winsched\DDW\Files\APPR_IRL\</ConfiguredValue>
+    //'</Configuration>
+    //'</DTSConfiguration>
+        sConfigName = strReplace(sConfigName.toUpperCase(),"D:/","//S000013845/");
+        var maxVariableSave = "";
+        if (!fso.FileExists(sConfigName)) {
+        sPackageNameList = sPackageNameList + "CONFIG DOES NOT EXIST, ";
+        sFileOutgoingList = sFileOutgoingList + "CONFIG DOES NOT EXIST, ";
+        } else {
+        maxVariableSave = maxVariable;
+        var objFile = fso.OpenTextFile(sConfigName, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        //afile = fso.OpenTextFile(jobdatalist, 1);//ForReading=1,ForWriting=2,ForAppending=8
+            while(!objFile.AtEndOfStream) {
+        linein = objFile.ReadLine();
+        iStart = linein.indexOf("Variables[");
+        while(iStart>0) {
+        iStart = iStart + String("Variables[").length;
+        iEnd = linein.indexOf("::", iStart);
+        if (iEnd > 0) {
+        aNamespace[maxVariable] = linein.substring(iStart, iEnd-iStart); //"User"
+    //'msgbox aNamespace(maxVariable)
+        iStart = iEnd + String("::").length;
+        iEnd = linein.indexOf("]", iStart);
+    //'msgbox "<"+Mid(linein, iStart, iEnd-iStart)+">"+cStr(maxVariable)
+        aVariable[maxVariable] = linein.substring(iStart, iEnd-iStart);
+        maxVariable = maxVariable + 1; //"FilePath"
+        } else {
+        aNamespace[maxVariable] = "User";
+        iEnd = linein.substring(iStart,1);
+        aVariable[maxVariable] = linein.substring(iStart, iEnd-iStart);
+        maxVariable = maxVariable + 1; //"FilePath"
+        }
+        iStart = linein.indexOf("Variables[", iStart); //InStr(iStart,linein,"Variables[",1)
+        }
+        iStart = linein.indexOf("<ConfiguredValue>"); //iStart = InStr(1,linein,"<ConfiguredValue>",1)
+        while(iStart>0) {
+        iStart = iStart + String("<ConfiguredValue>").length;
+        iEnd = linein.indexOf("</ConfiguredValue>", iStart);//iEnd = InStr(iStart,linein,"</ConfiguredValue>",1)
+        if (iEnd<0) { 
+           iEnd = linein.indexOf("/ConfiguredValue>", iStart);//iEnd = InStr(iStart,linein,"/ConfiguredValue>",1)
+        }
+    //'msgbox linein
+        sVariableValue = linein.substring(iStart, iEnd-iStart);//Mid(linein, iStart, iEnd-iStart)
+        sVariableValue = strReplace(sVariableValue.toUpperCase(),"D:/","//S000013845/");//Replace(UCase(sVariableValue),"D:\",sServer)
+    //'msgbox aVariable(maxVariable)+"="+sVariableValue+">"+cStr(maxVariableValue)
+        aVariableValue[maxVariableValue] = sVariableValue; 
+        maxVariableValue++;//'"\\S000013845\winsched\DDW\Files\APPR_IRL\"
+        iStart = iEnd;
+        iStart = linein.indexOf("<ConfiguredValue>", iStart);//InStr(iStart,linein,"<ConfiguredValue>",1)
+        }
+        }
+        objFile.close();
+        if (maxVariable!=maxVariableValue) {
+        maxVariable = maxVariableSave;
+        maxVariableValue = maxVariableSave;
+        }
+        }
+    }
+    
+    
+    function ForEachCOPY(sCopy){
+        sCopy = sCopy.toUpperCase();
+        var tmpSetVariableValue;
+        for (var i = 0; i < maxSetVariable; i++) {
+        tmpSetVariableValue = strReplace(aSetVariableValue[i],'"','');
+        sCopy = strReplace(sCopy,"%"+aSetVariable[i]+"%",tmpSetVariableValue);
+        }
+        //problepetai mono h periptwsh na exei mia metabliti mesa se mia metabliti
+        for (var i = 0; i < maxSetVariable; i++) {
+        tmpSetVariableValue = strReplace(aSetVariableValue[i],'"','');
+        sCopy = strReplace(sCopy,"%"+aSetVariable[i]+"%",tmpSetVariableValue)
+        }
+        sCopy = strReplace(sCopy,"D:/","//S000013845/");
+        sCopy = strReplace(sCopy,"[",'"');
+        sCopy = strReplace(sCopy,"]",'"');
+        
+        var bReplaceSpace = 1;
+        sSET.split(" ");
+        aCopy = sCopy.split('"');
+        var sCopyNew = "";
+        for (var i = 0; i < aCopy.length; i++) {
+        if (bReplaceSpace==1){
+        sCopyNew = sCopyNew + strReplace(aCopy[i]," ","?");
+        bReplaceSpace = 0;
+        } else {
+        sCopyNew = sCopyNew + aCopy[i];
+        bReplaceSpace = 1;
+        }
+        }
+        
+        aCopy = sCopyNew.split("?");
+        var iArgument = 0;
+        var sFileNameFrom = "";
+        var sFindNameCopy = ",>>,1^>^>,";
+        var sFindNameCopy2 = ",ECHO,COPY,MOVE,/Y,1^>^>,";
+        for (var i = 0; i < aCopy.length; i++) {//to 0 8a einai to copy/move
+        sFileNameCopy = aCopy[i].toUpperCase();
+        if (sFindNameCopy.indexOf(sFileNameCopy)>=0) {
+        break;
+        }
+        if (sFindNameCopy2.indexOf(sFileNameCopy)<0) {
+        //If InStr(1,",ECHO,COPY,MOVE,/Y,1^>^>,",sFileNameCopy,1)=0 Then
+        if (aCopy[0]== "COPY") {//Copy or Move
+        if (iArgument==0) {
+        aFileNameFrom = sFileNameCopy.split("/"); // \
+        sFileNameFrom = aFileNameFrom(aFileNameFrom.length);
+        sFileNameCopy = ClearDblSlash(sFileNameCopy);
+        sPackageNameList = sPackageNameList + sFileNameCopy + ", ";
+        sFileOutgoingList = sFileOutgoingList + "(I), ";
+        } else {
+        aFileNameFrom = sFileNameCopy.split("/"); // \
+        if (aFileNameFrom[aFileNameFrom.length].indexOf(".")>=0){
+        //If InStr(1,aFileNameFrom(UBound(aFileNameFrom)),".",1)>0 Then
+        //exei hdh filename (kanei metafora kai rename)
+        } else {
+        if (sFileNameCopy.substring(sFileNameCopy.length, 1)!="/" && sFileNameFrom.substring(1,1)!="/") {
+        //If Mid(sFileNameCopy,Len(sFileNameCopy),1) <> "\" And Mid(sFileNameFrom,1,1) <> "\" Then
+        sFileNameCopy = sFileNameCopy + "/" + sFileNameFrom;
+        } else {
+        sFileNameCopy = sFileNameCopy + sFileNameFrom;
+        }
+        }
+        sFileNameCopy = ClearDblSlash(sFileNameCopy);
+        sPackageNameList = sPackageNameList + sFileNameCopy + ", ";
+        sFileOutgoingList = sFileOutgoingList + "(O), ";
+        }
+        } else {
+    ////robocopy \\w000010002\ftproot\DFR\FTOPDCRM %LocalPath% DDWCP.PD.MIIPXACC.TXT
+        if (iArgument==0) {
+        sFileNameFrom = aCopy[aCopy.length].toUpperCase(); //to teleutaio argument einai to onoma tou arxeioy
+        }
+        if (i < aCopy.length) { //se ola ta upoloipa arguments bale to filename ektow ap' to teleutaio
+        aFileNameFrom = sFileNameCopy.split("/");
+        if (aFileNameFrom[aFileNameFrom.length].indexOf(".")>=0) { //InStr(1,aFileNameFrom(UBound(aFileNameFrom)),".",1)>0 Then
+        //exei hdh filename (kanei metafora kai rename)
+        } else {
+        if (sFileNameCopy.substring(sFileNameCopy.length, 1)!="/" && sFileNameFrom.substring(1,1)!="/") {//Mid(sFileNameCopy,Len(sFileNameCopy),1) <> "\" And Mid(sFileNameFrom,1,1) <> "\" Then
+        sFileNameCopy = sFileNameCopy + "/" + sFileNameFrom;
+        } else {
+        sFileNameCopy = sFileNameCopy + sFileNameFrom;
+        }
+        }
+        sFileNameCopy = ClearDblSlash(sFileNameCopy);
+        sPackageNameList = sPackageNameList + sFileNameCopy + ", ";
+        if (iArgument==0) {
+        sFileOutgoingList = sFileOutgoingList + "(I), ";
+        } else {
+        sFileOutgoingList = sFileOutgoingList + "(O), ";
+        }
+        }
+        }
+        iArgument++;
+        }
+        }
+    
+    }
+    
+    function ClearDblSlash(sClearDblSlash){
+        var sClearDbls = sClearDblSlash.substring(2, sClearDblSlash.length); //Mid(sClearDblSlash,2,Len(sClearDblSlash))
+        var sTmpClearDbls = strReplace(sClearDbls,"//","/");
+        return sClearDblSlash.substring(1,1)+sTmpClearDbls;//Mid(sClearDblSlash,1,1)+sTmpClearDbls
+    }
+    
+    function ForEachBat(sBatName){
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        var	afile = fso.OpenTextFile(sBatName, 1);//ForReading=1,ForWriting=2,ForAppending=8
+        var sLine;
+        var sLineUC;
+        while(!afile.AtEndOfStream) {
+        sLine = afile.ReadLine();
+        sLine = strReplace(sLine,String.fromCharCode(9),' ');
+        sLineUC = sLine.toUpperCase();
+        if (sLine.length>3) {
+        if (sLineUC.substring(0, 4)=="SET " || sLineUC.indexOf(' SET ')>=0) {
+        sSET = sLine.trim();
+        ForEachSET(sSET);
+        }
+        }
+        if (sLineUC.indexOf('DTEXEC')>=0) { 
+        sDTEXEC = sLine.trim();
+        ForEachDTEXEC(sDTEXEC); 
+        }
+        if ((sLineUC.indexOf('COPY ')>=0 || sLineUC.indexOf('MOVE ')>=0) && (sLineUC.indexOf('ECHO ')<0) && (sLineUC.indexOf('REM ')<0)) { 
+        sCopy = sLine.trim();
+        ForEachCOPY(sCopy); 
+        }
+        }
+        afile.close();
+    }
+    
+    function strReplace(str, sFrom, sTo) {
+      var strNew="";
+      var astr = str.split(sFrom);
+      for (istr = 0; istr < astr.length; istr++) {
+        strNew = strNew + astr[istr] + sTo;
+      }
+      if(sTo==""){
+        return strNew;
+      } else {
+        return strNew.substr(0,strNew.length-sTo.length);
+      }
+    }
+    function strReverse(str) {
+      var strNew="";
+      for (istr = 0; istr < str.length; istr++) {
+        strNew = str.substr(istr,1) + strNew;
+      }
+      return strNew;
+    }
+    function main() {
+      //
+      //
+      // 
+      //
+      //
+      var coll = document.getElementsByClassName("collapsible"); var k;
+      for (k = 0; k < coll.length; k++) {
+        coll[k].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        }
+          }
+        );
+      }
+    
+    }
+    
+    main();
+    
+    
+        </script>
+    <div style='background-color:lightblue;color:white;padding:1px;text-align:right;font-weight:bold'>
+    <p>ACTIONS <button onclick='a98.click()'><a id='a98' hidden=true href='C:\Users\e38536\Documents\Misc\vbscript\Reminder.vbs'></a>Reminder</button>
+               <button onclick='a99.click()'><a id='a99' hidden=true href='C:\html\Options.html'></a>Options</button></p></div>
+    
+    
+        </body>
+    
+    </html>
+    
